@@ -66,7 +66,7 @@ body {
     margin-right:20px;
 }
 .over_map { 
-    position: absolute; top: 40px; left: 75%; z-index: 99; 
+    position: absolute; top: 40px; left: 65%; z-index: 99; 
     background: white;
     -webkit-transform: rotate(-3deg);
     padding-top:100px;
@@ -94,6 +94,7 @@ body {
 
 .h3 {
     font-family: 'Handlee', cursive;
+	padding-bottom:50px;
 }
 
 .ticket {
@@ -103,4 +104,8 @@ body {
 
 .invisible {
     color:#00ff00;
+}
+
+.float {
+	float:left;
 }

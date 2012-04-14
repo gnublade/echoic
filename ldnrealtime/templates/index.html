@@ -23,6 +23,7 @@
         var myOptions = {
           center: new google.maps.LatLng(-34.397, 150.644),
           zoom: 8,
+		  disableDefaultUI: true,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"),
@@ -40,8 +41,8 @@
             var marker = new google.maps.Marker({
               position: latLong,
               map: map,
-            });
-          });
+			});
+		  });
         }
       }
 
@@ -84,29 +85,31 @@
   <title>Echoic</title>
 </head>
 <body>
-  <div id="map_canvas" style="width:100%; height:100%"></div>
+  <div id="map_canvas"></div>
   <aside class="over_map">
     <hgroup>
     <img src="{{ STATIC_URL }}images/logo.png" class="ticket">
         <h1 class="invisible">Echoic</h1>
-        <h3 class="invisible">live podcasts near you</h3>
+        <h3 class="invisible">Join a global conversation</h3>
     </hgroup>
-        <button id="call-btn" class="btn btn-primary btn-large">Call</button>
+        <button id="call-btn" class="btn btn-primary btn-large">Join</button>
     <section>
-        <h2>Tune into Casts</h2>
-        <img src="#" height="70" width="80">
-        <div class="span3"><p>Twitter name</p>
-        <p><b>Title</b>Description, tags</p>
-        <p>12:56 mins, 24 listeners</p>
-        </div>
+        <h3>What would you like to talk about?</h3>
+		<label for="topic">Topic/Question</label>
+		<input name="topic" type="text" class="input-text" class="float" style="margin-right:20px"/>
+		
+		<a href="#" class="btn btn-primary btn-large" onClick="javascript:submit()" class="green">Go</a>
+         </div>
     </section>
     <section>
-        <h2>Going Viral</h2>
-        <p>London Bridge History</p>
-        <p>This cast tells you a story about the bridge's history and leads you along the bridge</p>
-        <em><b>85 Eardroppers</b></em>
+        <h2>Join a global conversation</h2>
+        <img src="{{ STATIC_URL }}images/gmarker_yellow.png" class="float">
+		<p><b>Topic of first person called</b><br> 8 listeners<em>4:54 mins</em></p>
     </section>
   </aside>
+  <footer>
+  <p class="img">Build and designed by <a href="https://twitter.com/#!/gnublade">@gnublade</a> and <a href="https://twitter.com/#!/feeschmidts">"@feeschmidts</a> at #ldnrealtime</p>
+  </footer>
 </body>
 </html>
 
