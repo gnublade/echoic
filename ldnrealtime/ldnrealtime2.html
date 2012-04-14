@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<meta charset="UFT-8">
+		<link href="bootstrap.css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans">
+		<style type="text/css">
+		<link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
+			 body {
+				padding-top: 0px;
+				padding-bottom: 40px;
+			}
+			.background {
+				background-image: url(beer_taps2.jpg); 
+				background-attachment: fixed;
+				width: 940px; 
+				height: 1300px;
+				background-position: 0 50px;
+				background-repeat: no-repeat;
+				/*background-size: cover;*/
+			}
+			.top {
+				line-height: 50px;
+			}
+			.quote {
+			font-family: "Droid Sans";
+			color: white;
+			font-size: 4em;
+			line-height: 55px;
+			text-shadow: 0 5px 10px;
+			padding-top: 40px;
+			font-style: italic;
+			quotes:"'" "'";
+			}
+			.grabber {
+			height: 450px;
+			}
+			.white {
+			color: white;
+			padding-top: 30px;
+			}
+			.speechbubble {
+			padding: 15px 30px;
+			margin: 10px;
+			background: -webkit-gradient(linear, 0 0, 0 100%, from(white), to(white));
+			border-radius: 10px / 10px;
+			position: relative;
+			}
+			.solid {
+			background: lightgrey;
+			padding-top: 15px;
+			padding-bottom: 10px;
+			height: 340px;
+			margin: 30px 0;
+			}
+			.rotate {
+			-webkit-transform: rotate(-3deg);
+			}
+			.rotate {
+			-webkit-transform: rotate (2deg);
+			}
+			.space {
+			height: 20px;
+			}
+			.blocktext {
+			padding-top:40px;
+			vertical-align: middle;
+			}
+			.float {
+			float:right;
+			}
+			
+			.wrapper { 
+				position: relative; 
+				margin-right:20px;
+			}
+			.over_map { 
+			position: absolute; top: 40px; left: 75%; z-index: 99; 
+			background: white;
+			-webkit-transform: rotate(-3deg);
+			padding-top:100px;
+			padding-bottom:25px;
+			padding-right:50px;
+			padding-left:50px;
+			border-radius: 10px / 10px;
+			}
+			
+		.btn-custom {
+			background-color: hsl(47, 94%, 43%) !important;
+			background-repeat: repeat-x;
+			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f9d75b", endColorstr="#d4a806");
+			background-image: -khtml-gradient(linear, left top, left bottom, from(#f9d75b), to(#d4a806));
+			background-image: -moz-linear-gradient(top, #f9d75b, #d4a806);
+			background-image: -ms-linear-gradient(top, #f9d75b, #d4a806);
+			background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f9d75b), color-stop(100%, #d4a806));
+			background-image: -webkit-linear-gradient(top, #f9d75b, #d4a806);
+			background-image: -o-linear-gradient(top, #f9d75b, #d4a806);
+			background-image: linear-gradient(#f9d75b, #d4a806);
+			border-color: #d4a806 #d4a806 hsl(47, 94%, 37%);
+			color: #333 !important;
+			text-shadow: 0 1px 1px rgba(255, 255, 255, 0.39);
+			-webkit-font-smoothing: antialiased;
+		}
+		
+		.h3 {
+		font-family: 'Handlee', cursive;
+		}
+		
+		.ticket {
+		-webkit-transform: rotate(-5deg);
+		position: absolute; top: -5%; left: -10%; z-index: 99; 
+		}
+		
+		.invisible {
+		color:#00ff00;
+		}
+			
+		</style>
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAMdkagojX9jU-1_YMR4G_TsDyr_8yYGqE&sensor=true">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var myOptions = {
+          center: new google.maps.LatLng(-34.397, 150.644),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            myOptions);
+		// Check for geolocation support
+		if (navigator.geolocation) {
+			// Use method getCurrentPosition to get coordinates
+			navigator.geolocation.getCurrentPosition(function (position) {
+				// Access them accordingly
+				var lat = position.coords.latitude;
+				var long = position.coords.longitude;
+				var latLong = new google.maps.LatLng(lat, long);
+				map.setCenter(latLong, 13);
+					
+				var marker = new google.maps.Marker({
+					position: latLong,
+					map: map,
+				});
+			
+			});
+	
+		}
+		
+
+      }
+    </script>
+
+	<title>Echoic</title>
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:100%; height:100%"></div>
+		<aside class="over_map">
+	<hgroup>
+		<img src="logo.png" class="ticket">
+		<h1 class="invisible">Echoic</h1>
+		<h3 class="invisible">live podcasts near you</h3>
+		</hgroup>
+		<a class="btn btn-primary btn-large">Start casting</a>
+	<section>
+		<h2>Tune into Casts</h2>
+		<img src="#" height="70" width="80">
+		<div class="span3"><p>Twitter name</p>
+		<p><b>Title</b>Description, tags</p>
+		<p>12:56 mins, 24 listeners</p>
+		</div>
+	</section>
+	<section>
+		<h2>Going Viral</h2>
+		<p>London Bridge History</p>
+		<p>This cast tells you a story about the bridge's history and leads you along the bridge</p>
+		<em><b>85 Eardroppers</b></em>
+	</section>
+	</aside>
+  </body>
+</html>
+
