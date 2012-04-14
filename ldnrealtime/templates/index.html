@@ -1,10 +1,50 @@
-<!doctype html>
-<html>
-  <head>
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta charset="UFT-8">
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Handlee' rel='stylesheet' type='text/css'>
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="//static.twilio.com/libs/twiliojs/1.0/twilio.min.js"></script>
+
+    <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet" />
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAMdkagojX9jU-1_YMR4G_TsDyr_8yYGqE&sensor=true">
+    </script>
     <script type="text/javascript">
- 
+      function initialize() {
+        var myOptions = {
+          center: new google.maps.LatLng(-34.397, 150.644),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            myOptions);
+        // Check for geolocation support
+        if (navigator.geolocation) {
+          // Use method getCurrentPosition to get coordinates
+          navigator.geolocation.getCurrentPosition(function (position) {
+            // Access them accordingly
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            var latLong = new google.maps.LatLng(lat, long);
+            map.setCenter(latLong, 13);
+              
+            var marker = new google.maps.Marker({
+              position: latLong,
+              map: map,
+            });
+          });
+        }
+      }
+
       Twilio.Device.setup("{{ token }}");
  
       Twilio.Device.ready(function (device) {
@@ -35,17 +75,38 @@
       }
 
       $(function() {
+          initialize();
         $('#call-btn').on('click', call);
       });
+    
     </script>
 
-  </head>
-  <body>
-    <h1>Welcome to #ldnrealtime</h1>
-  </head>
-  <body>
-    <button id="call-btn" class="call">
-      Call
-    </button>
-  </body>
+  <title>Echoic</title>
+</head>
+<body>
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+  <aside class="over_map">
+    <hgroup>
+    <img src="{{ STATIC_URL }}images/logo.png" class="ticket">
+        <h1 class="invisible">Echoic</h1>
+        <h3 class="invisible">live podcasts near you</h3>
+    </hgroup>
+        <button id="call-btn" class="btn btn-primary btn-large">Call</button>
+    <section>
+        <h2>Tune into Casts</h2>
+        <img src="#" height="70" width="80">
+        <div class="span3"><p>Twitter name</p>
+        <p><b>Title</b>Description, tags</p>
+        <p>12:56 mins, 24 listeners</p>
+        </div>
+    </section>
+    <section>
+        <h2>Going Viral</h2>
+        <p>London Bridge History</p>
+        <p>This cast tells you a story about the bridge's history and leads you along the bridge</p>
+        <em><b>85 Eardroppers</b></em>
+    </section>
+  </aside>
+</body>
 </html>
+
