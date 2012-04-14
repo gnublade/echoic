@@ -124,11 +124,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'django_twilio',
     'south',
+
+    'ldnrealtime.accounts',
+    'ldnrealtime.tw',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -159,6 +162,8 @@ LOGGING = {
         },
     }
 }
+
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
 try:
     from .local import *
