@@ -17,6 +17,7 @@
  
       Twilio.Device.connect(function (conn) {
         console.log("Successfully established call");
+        $('#call-btn').text("Hangup").off('click').on('click', hangup);
       });
  
       Twilio.Device.disconnect(function (conn) {
@@ -25,11 +26,17 @@
 
       function call() {
         Twilio.Device.connect();
+        $('#call-btn').text('Calling');
       }
 
       function hangup() {
         Twilio.Device.disconnectAll();
+        $('#call-btn').text('Call').off('click').on('click', call);
       }
+
+      $(function() {
+        $('#call-btn').on('click', call);
+      });
     </script>
 
   </head>
@@ -37,11 +44,8 @@
     <h1>Welcome to #ldnrealtime</h1>
   </head>
   <body>
-    <button class="call" onclick="call();">
+    <button id="call-btn" class="call">
       Call
-    </button>
-    <button class="hangup" onclick="hangup();">
-      Hangup
     </button>
   </body>
 </html>
