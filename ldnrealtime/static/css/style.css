@@ -103,9 +103,9 @@ body {
 }
 
 .stamp {
-	position: absolute; top: 3%; right: 18%; z-index:99;
-	max-width: 50%;
-}
+	position: absolute; top: 3%; right: 50%; z-index:99;
+	max-width: 30%;
+	}
 
 .invisible {
     color:#00ff00;
@@ -113,4 +113,7 @@ body {
 
 .float {
 	float:left;
+}
+#hangup-btn {
+	display: none;
 }

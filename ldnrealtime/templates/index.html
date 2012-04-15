@@ -47,7 +47,7 @@
           });
           google.maps.event.addListener(marker, 'click', function() {
             var room = 'green';
-            Twilio.Device.connect({room: room});
+            call(room);
             channel.trigger('client-conference-create', {
               'room': room,
               'members': [member.id, socketId]
@@ -61,6 +61,7 @@
       }
 
       function initialize() {
+	    $('#hangup-btn').on('click', hangup);
         var myOptions = {
           center: new google.maps.LatLng(-34.397, 150.644),
           zoom: 8,
@@ -147,27 +148,24 @@
  
       Twilio.Device.connect(function (conn) {
         console.log("Successfully established call");
-        $('#call-btn').text("Hangup").off('click').on('click', hangup);
       });
  
       Twilio.Device.disconnect(function (conn) {
         console.log("Call ended");
       });
 
-      function call() {
-        Twilio.Device.connect();
-        $('#call-btn').text('Calling');
+      function call(room) {
+        Twilio.Device.connect({room: room});
+		$('#hangup-btn').show();
       }
 
       function hangup() {
         Twilio.Device.disconnectAll();
-        $('#call-btn').text('Call').off('click').on('click', call);
+        $('#hangup-btn').hide();
       }
 
-      $(function() {
-          initialize();
-        $('#call-btn').on('click', call);
-      });
+      $(initialize);
+	  
     
     </script>
 
@@ -182,7 +180,7 @@
         <h1 class="invisible">Echoic</h1>
         <h3 class="invisible">Join a global conversation</h3>
     </hgroup>
-        <button id="call-btn" class="btn btn-primary btn-large">Join</button>
+        <button id="hangup-btn" class="btn btn-primary btn-large">Hang Up</button>
     <section>
         <h3>What would you like to talk about?</h3>
         <label for="topic">Topic/Question</label>
@@ -193,6 +191,7 @@
     </section>
     <section>
         <h2>Join a conversation</h2>
+		<p>To start a conversation click on a person marker or join an existing by choosing one below.</p>
         <img src="{{ STATIC_URL }}images/gmarker_yellow.png" class="float">
       <p><b>Topic of first person called</b><br> 8 Echoers<em>4:54 mins</em></p>
     </section>
