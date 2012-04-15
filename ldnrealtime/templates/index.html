@@ -20,17 +20,24 @@
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAMdkagojX9jU-1_YMR4G_TsDyr_8yYGqE&sensor=true">
     </script>
     <script type="text/javascript">
+      var map;
+
       // Enable pusher logging - don't include this in production
       Pusher.log = function(message) {
         if (window.console && window.console.log) window.console.log(message);
       };
 
       var pusher = new Pusher("{{ PUSHER_KEY }}");
+      var socketId = null;
+      pusher.connection.bind('connected', function() {
+          socketId = pusher.connection.socket_id;
+      });
       Pusher.channel_auth_endpoint = '/pusher/auth/';
       var PresenceChannel = pusher.subscribe('presence-world');
 
       PresenceChannel.bind('pusher:subscription_succeeded', function(members){
         $('#members').empty();
+        locateMe();
         members.each(function(member) {
             addMember(member);
         });
@@ -38,12 +45,28 @@
       PresenceChannel.bind('pusher:member_added', function(member){
         addMember(member);
       });
+      PresenceChannel.bind('member_location', function(member){
+        updateMember(member);
+      });
       PresenceChannel.bind('pusher:member_removed', function(member){
           removeMember(member)
       });
+      function updateMember(member){
+        $('#member_'+ member.id.replace('.', '_')).text('('+member.info.lat+', '+member.info.lon+')');
+        var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
+        var marker = new google.maps.Marker({
+          position: latLong,
+          map: map,
+        });
+      }
       function addMember(member){
         var p = $('<p>', { text: member.id, id: 'member_' + member.id.replace('.', '_')} );
         $('#members').append( p );
+        var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
+        var marker = new google.maps.Marker({
+          position: latLong,
+          map: map,
+        });
       }
       function removeMember(member){
         $('#member_'+ member.id.replace('.', '_')).remove()
@@ -56,8 +79,10 @@
           disableDefaultUI: true,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
-            myOptions);
+        map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      }
+
+      function locateMe() {
         // Check for geolocation support
         if (navigator.geolocation) {
           // Use method getCurrentPosition to get coordinates
@@ -65,16 +90,27 @@
             // Access them accordingly
             var lat = position.coords.latitude;
             var long = position.coords.longitude;
+            jQuery.ajax({
+              url: "{% url pusher_location %}",
+              type: "post",
+              data: {
+                socket_id: socketId,
+                lat: lat,
+                lon: long
+              }
+            });
+            //var success = PresenceChannel.trigger('client-member_location', {id: socketId, lat: lat, lon: long});
             var latLong = new google.maps.LatLng(lat, long);
             map.setCenter(latLong, 13);
               
-            var marker = new google.maps.Marker({
+            /*var marker = new google.maps.Marker({
               position: latLong,
               map: map,
-            });
+            });*/
           });
         }
       }
+
 
       Twilio.Device.setup("{{ token }}");
  
