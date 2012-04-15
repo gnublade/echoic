@@ -42,7 +42,8 @@ def record(request):
 def conference(request):
     response = Response()
     response.dial().conference(                                                         
-        name=request.REQUEST['room'],                                                             
+        name=request.REQUEST['room'],
         startConferenceOnEnter=True,
+        endConferenceOnExit=True
     ) 
     return response

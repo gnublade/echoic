@@ -129,7 +129,7 @@
         PresenceChannel.bind('pusher:member_removed', function(member){
             removeMember(member)
         });
-        PresenceChannel.bind('client-conference-create', function(data){
+        PresenceChannel.bind('client-conference-connect', function(data){
             if ($.inArray(socketId, data.members)) {
               call(data.room);
             }
@@ -148,20 +148,20 @@
  
       Twilio.Device.connect(function (conn) {
         console.log("Successfully established call");
+        $('#hangup-btn').show();
       });
  
       Twilio.Device.disconnect(function (conn) {
         console.log("Call ended");
+        $('#hangup-btn').hide();
       });
 
       function call(room) {
         Twilio.Device.connect({room: room});
-		$('#hangup-btn').show();
       }
 
-      function hangup() {
+      function hangup(channel) {
         Twilio.Device.disconnectAll();
-        $('#hangup-btn').hide();
       }
 
       $(initialize);
