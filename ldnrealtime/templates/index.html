@@ -27,30 +27,7 @@
         if (window.console && window.console.log) window.console.log(message);
       };
 
-      var pusher = new Pusher("{{ PUSHER_KEY }}");
       var socketId = null;
-      pusher.connection.bind('connected', function() {
-          socketId = pusher.connection.socket_id;
-      });
-      Pusher.channel_auth_endpoint = '/pusher/auth/';
-      var PresenceChannel = pusher.subscribe('presence-world');
-
-      PresenceChannel.bind('pusher:subscription_succeeded', function(members){
-        $('#members').empty();
-        locateMe();
-        members.each(function(member) {
-            addMember(member);
-        });
-      });
-      PresenceChannel.bind('pusher:member_added', function(member){
-        addMember(member);
-      });
-      PresenceChannel.bind('member_location', function(member){
-        updateMember(member);
-      });
-      PresenceChannel.bind('pusher:member_removed', function(member){
-          removeMember(member)
-      });
       function updateMember(member){
         $('#member_'+ member.id.replace('.', '_')).text('('+member.info.lat+', '+member.info.lon+')');
         var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
@@ -60,13 +37,15 @@
         });
       }
       function addMember(member){
-        var p = $('<p>', { text: member.id, id: 'member_' + member.id.replace('.', '_')} );
+        var p = $('<p>', { text: '('+member.info.lat+', '+member.info.lon+')', id: 'member_' + member.id.replace('.', '_')} );
         $('#members').append( p );
-        var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
-        var marker = new google.maps.Marker({
-          position: latLong,
-          map: map,
-        });
+        if (member.info) {
+          var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
+          var marker = new google.maps.Marker({
+            position: latLong,
+            map: map,
+          });
+        }
       }
       function removeMember(member){
         $('#member_'+ member.id.replace('.', '_')).remove()
@@ -80,6 +59,7 @@
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        locateMe();
       }
 
       function locateMe() {
@@ -97,6 +77,9 @@
                 socket_id: socketId,
                 lat: lat,
                 lon: long
+              },
+              success: function() {
+                subscribeMe();
               }
             });
             var latLong = new google.maps.LatLng(lat, long);
@@ -111,6 +94,31 @@
         }
       }
 
+      function subscribeMe() {
+        var pusher = new Pusher("{{ PUSHER_KEY }}");
+        pusher.connection.bind('connected', function() {
+            socketId = pusher.connection.socket_id;
+        });
+        Pusher.channel_auth_endpoint = '/pusher/auth/';
+
+        var PresenceChannel = pusher.subscribe('presence-world');
+
+        PresenceChannel.bind('pusher:subscription_succeeded', function(members){
+          $('#members').empty();
+          members.each(function(member) {
+              addMember(member);
+          });
+        });
+        PresenceChannel.bind('pusher:member_added', function(member){
+          addMember(member);
+        });
+        PresenceChannel.bind('member_location', function(member){
+          updateMember(member);
+        });
+        PresenceChannel.bind('pusher:member_removed', function(member){
+            removeMember(member)
+        });
+      }
 
       Twilio.Device.setup("{{ token }}");
  

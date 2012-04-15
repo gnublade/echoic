@@ -26,8 +26,7 @@ def home(request):
 def pusher_auth(request):
     channel = request.POST["channel_name"]
     socket_id = request.POST["socket_id"]
-
-    latlon = cache.get('location:%s' % socket_id)
+    latlon = request.session.get('location')
     info = {'lat': latlon[0], 'lon': latlon[1]} if latlon else None
     r = pusher._real_getitem(channel).authenticate(socket_id, {
         'user_id': socket_id,
@@ -38,16 +37,7 @@ def pusher_auth(request):
 @require_POST
 @csrf_exempt
 def pusher_location(request):
-    socket_id = request.POST["socket_id"]
     lat = request.POST["lat"]
     lon = request.POST["lon"]
-    pusher['presence-world'].trigger('member_location', {
-        'id': socket_id,
-        'info': {
-            'lat': lat,
-            'lon': lon,
-        }
-    }, socket_id)
-
-    cache.set('location:%s' % socket_id, (lat, lon))
+    request.session['location'] = (lat, lon)
     return HttpResponse()
