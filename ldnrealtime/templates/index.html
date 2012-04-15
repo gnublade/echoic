@@ -99,14 +99,14 @@
                 lon: long
               }
             });
-            //var success = PresenceChannel.trigger('client-member_location', {id: socketId, lat: lat, lon: long});
             var latLong = new google.maps.LatLng(lat, long);
             map.setCenter(latLong, 13);
               
-            /*var marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
               position: latLong,
               map: map,
-            });*/
+              title:"Hello World!"
+            });
           });
         }
       }
@@ -154,7 +154,8 @@
   <div id="map_canvas"></div>
   <aside class="over_map">
     <hgroup>
-    <img src="{{ STATIC_URL }}images/logo.png" class="ticket">
+    <img src="{{ STATIC_URL }}images/logo_new.png" class="ticket">
+    <img src="{{ STATIC_URL}}images/stamp.png" class="stamp">
         <h1 class="invisible">Echoic</h1>
         <h3 class="invisible">Join a global conversation</h3>
     </hgroup>
@@ -168,9 +169,9 @@
          </div>
     </section>
     <section>
-        <h2>Join a global conversation</h2>
+        <h2>Join a conversation</h2>
         <img src="{{ STATIC_URL }}images/gmarker_yellow.png" class="float">
-      <p><b>Topic of first person called</b><br> 8 listeners<em>4:54 mins</em></p>
+      <p><b>Topic of first person called</b><br> 8 Echoers<em>4:54 mins</em></p>
     </section>
     <section id="members">
     </section>
