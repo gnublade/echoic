@@ -28,17 +28,8 @@
       };
 
       var socketId = null;
-      function updateMember(member){
-        $('#member_'+ member.id.replace('.', '_')).text('('+member.info.lat+', '+member.info.lon+')');
-        var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
-        var marker = new google.maps.Marker({
-          position: latLong,
-          map: map,
-        });
-      }
       function addMember(member, channel){
         var p = $('<p>', { text: '('+member.info.lat+', '+member.info.lon+')', id: 'member_' + member.id.replace('.', '_')} );
-        $('#members').append( p );
         if (member.id !== socketId && member.info) {
           var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
           var marker = new google.maps.Marker({
@@ -57,7 +48,6 @@
         }
       }
       function removeMember(member){
-        $('#member_'+ member.id.replace('.', '_')).remove()
       }
 
       function initialize() {
@@ -98,7 +88,6 @@
             var marker = new google.maps.Marker({
               position: latLong,
               map: map,
-              title:"Hello World!",
               icon: "{{ STATIC_URL }}images/map_me_indicator.png"
             });
           });
@@ -115,16 +104,12 @@
         var PresenceChannel = pusher.subscribe('presence-world');
 
         PresenceChannel.bind('pusher:subscription_succeeded', function(members){
-          $('#members').empty();
           members.each(function(member) {
               addMember(member, PresenceChannel);
           });
         });
         PresenceChannel.bind('pusher:member_added', function(member){
           addMember(member, PresenceChannel);
-        });
-        PresenceChannel.bind('member_location', function(member){
-          updateMember(member);
         });
         PresenceChannel.bind('pusher:member_removed', function(member){
             removeMember(member)
@@ -185,9 +170,6 @@
         <h3>Start a global conversation and meet new people.</h3>
 		<p>Click on anyone in the map to start a chat.</p>
         </div>
-    </section>
-    
-    <section id="members">
     </section>
   </aside>
   <footer>
