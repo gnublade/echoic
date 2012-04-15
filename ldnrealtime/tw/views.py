@@ -37,3 +37,12 @@ def record(request):
     else:
         response.record()
     return response
+
+@twilio_view
+def conference(request):
+    response = Response()
+    response.dial().conference(                                                         
+        name=request.REQUEST['room'],                                                             
+        startConferenceOnEnter=True,
+    ) 
+    return response

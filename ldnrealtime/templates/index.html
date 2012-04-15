@@ -36,14 +36,23 @@
           map: map,
         });
       }
-      function addMember(member){
+      function addMember(member, channel){
         var p = $('<p>', { text: '('+member.info.lat+', '+member.info.lon+')', id: 'member_' + member.id.replace('.', '_')} );
         $('#members').append( p );
-        if (member.info) {
+        if (member.id !== socketId && member.info) {
           var latLong = new google.maps.LatLng(member.info.lat, member.info.lon);
           var marker = new google.maps.Marker({
             position: latLong,
             map: map,
+          });
+          google.maps.event.addListener(marker, 'click', function() {
+            var room = 'green';
+            Twilio.Device.connect({room: room});
+            channel.trigger('client-conference-create', {
+              'room': room,
+              'members': [member.id, socketId]
+            });
+            console.log("click:" + member.id+', room:'+room);
           });
         }
       }
@@ -106,17 +115,22 @@
         PresenceChannel.bind('pusher:subscription_succeeded', function(members){
           $('#members').empty();
           members.each(function(member) {
-              addMember(member);
+              addMember(member, PresenceChannel);
           });
         });
         PresenceChannel.bind('pusher:member_added', function(member){
-          addMember(member);
+          addMember(member, PresenceChannel);
         });
         PresenceChannel.bind('member_location', function(member){
           updateMember(member);
         });
         PresenceChannel.bind('pusher:member_removed', function(member){
             removeMember(member)
+        });
+        PresenceChannel.bind('client-conference-create', function(data){
+            if ($.inArray(socketId, data.members)) {
+              Twilio.Device.connect(data.room);
+            }
         });
       }
 
