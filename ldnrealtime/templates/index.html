@@ -131,7 +131,7 @@
         });
         PresenceChannel.bind('client-conference-create', function(data){
             if ($.inArray(socketId, data.members)) {
-              Twilio.Device.connect(data.room);
+              call(data.room);
             }
         });
       }
