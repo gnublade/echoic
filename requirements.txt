@@ -1,3 +1,6 @@
 Django==1.4
 django-twilio==0.2
 South==0.7.4
+pusher==0.5
+django-pusher==0.1.1
+python-memcached==1.48
