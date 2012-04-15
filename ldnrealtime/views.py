@@ -47,7 +47,7 @@ def pusher_location(request):
             'lat': lat,
             'lon': lon,
         }
-    })
+    }, socket_id)
 
     cache.set('location:%s' % socket_id, (lat, lon))
     return HttpResponse()
