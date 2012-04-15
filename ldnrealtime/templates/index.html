@@ -6,6 +6,7 @@
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="//static.twilio.com/libs/twiliojs/1.0/twilio.min.js"></script>
+    <script src="http://js.pusher.com/1.11/pusher.min.js" type="text/javascript"></script>
 
     <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet" />
 
@@ -19,11 +20,40 @@
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAMdkagojX9jU-1_YMR4G_TsDyr_8yYGqE&sensor=true">
     </script>
     <script type="text/javascript">
+      // Enable pusher logging - don't include this in production
+      Pusher.log = function(message) {
+        if (window.console && window.console.log) window.console.log(message);
+      };
+
+      var pusher = new Pusher("{{ PUSHER_KEY }}");
+      Pusher.channel_auth_endpoint = '/pusher/auth/';
+      var PresenceChannel = pusher.subscribe('presence-world');
+
+      PresenceChannel.bind('pusher:subscription_succeeded', function(members){
+        $('#members').empty();
+        members.each(function(member) {
+            addMember(member);
+        });
+      });
+      PresenceChannel.bind('pusher:member_added', function(member){
+        addMember(member);
+      });
+      PresenceChannel.bind('pusher:member_removed', function(member){
+          removeMember(member)
+      });
+      function addMember(member){
+        var p = $('<p>', { text: member.id, id: 'member_' + member.id.replace('.', '_')} );
+        $('#members').append( p );
+      }
+      function removeMember(member){
+        $('#member_'+ member.id.replace('.', '_')).remove()
+      }
+
       function initialize() {
         var myOptions = {
           center: new google.maps.LatLng(-34.397, 150.644),
           zoom: 8,
-		  disableDefaultUI: true,
+          disableDefaultUI: true,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("map_canvas"),
@@ -41,8 +71,8 @@
             var marker = new google.maps.Marker({
               position: latLong,
               map: map,
-			});
-		  });
+            });
+          });
         }
       }
 
@@ -95,16 +125,18 @@
         <button id="call-btn" class="btn btn-primary btn-large">Join</button>
     <section>
         <h3>What would you like to talk about?</h3>
-		<label for="topic">Topic/Question</label>
-		<input name="topic" type="text" class="input-text" class="float" style="margin-right:20px"/>
-		
-		<a href="#" class="btn btn-primary btn-large" onClick="javascript:submit()" class="green">Go</a>
+        <label for="topic">Topic/Question</label>
+        <input name="topic" type="text" class="input-text" class="float" style="margin-right:20px"/>
+
+        <a href="#" class="btn btn-primary btn-large" onClick="javascript:submit()" class="green">Go</a>
          </div>
     </section>
     <section>
         <h2>Join a global conversation</h2>
         <img src="{{ STATIC_URL }}images/gmarker_yellow.png" class="float">
-		<p><b>Topic of first person called</b><br> 8 listeners<em>4:54 mins</em></p>
+      <p><b>Topic of first person called</b><br> 8 listeners<em>4:54 mins</em></p>
+    </section>
+    <section id="members">
     </section>
   </aside>
   <footer>
