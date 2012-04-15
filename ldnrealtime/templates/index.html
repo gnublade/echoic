@@ -93,11 +93,12 @@
             });
             var latLong = new google.maps.LatLng(lat, long);
             map.setCenter(latLong, 13);
-              
+
             var marker = new google.maps.Marker({
               position: latLong,
               map: map,
-              title:"Hello World!"
+              title:"Hello World!",
+              icon: "{{ STATIC_URL }}images/map_me_indicator.png"
             });
           });
         }
