@@ -39,7 +39,7 @@
           google.maps.event.addListener(marker, 'click', function() {
             var room = 'green';
             call(room);
-            channel.trigger('client-conference-create', {
+            channel.trigger('client-conference-connect', {
               'room': room,
               'members': [member.id, socketId]
             });
