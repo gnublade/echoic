@@ -43,7 +43,7 @@
               'room': room,
               'members': [member.id, socketId]
             });
-            console.log("click:" + member.id+', room:'+room);
+            console.log("click:["+member.id+', '+socketId+'] , room:'+room);
           });
         }
       }
@@ -115,7 +115,8 @@
             removeMember(member)
         });
         PresenceChannel.bind('client-conference-connect', function(data){
-            if ($.inArray(socketId, data.members)) {
+            if ($.inArray(socketId, data.members) !== -1) {
+              console.log('called: ['+data.members[0]+', '+data.members[1]+']')
               call(data.room);
             }
         });
