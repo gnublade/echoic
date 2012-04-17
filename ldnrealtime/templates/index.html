@@ -57,7 +57,7 @@
 	    $('#hangup-btn').on('click', hangup);
         var myOptions = {
           center: new google.maps.LatLng(-34.397, 150.644),
-          zoom: 8,
+          zoom: 4,
           disableDefaultUI: true,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -86,7 +86,7 @@
               }
             });
             var latLong = new google.maps.LatLng(lat, long);
-            map.setCenter(latLong, 13);
+            map.setCenter(latLong, 0);
 
             var marker = new google.maps.Marker({
               position: latLong,
