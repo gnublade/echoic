@@ -28,6 +28,7 @@
       };
 
       var socketId = null;
+      var memberMarkers = [];
       function addMember(member, channel){
         var p = $('<p>', { text: '('+member.info.lat+', '+member.info.lon+')', id: 'member_' + member.id.replace('.', '_')} );
         if (member.id !== socketId && member.info) {
@@ -45,9 +46,11 @@
             });
             console.log("click:["+member.id+', '+socketId+'] , room:'+room);
           });
+          memberMarkers[member.id] = marker;
         }
       }
       function removeMember(member){
+        memberMarkers[member.id].setMap(null);
       }
 
       function initialize() {
